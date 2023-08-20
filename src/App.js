@@ -1,9 +1,14 @@
 import React from "react";
-import Tetris from "./components/Tetris";
+import { Route, Routes } from "react-router-dom";
+import StartPage from "./page/StartPage";
+import Tetris from "./page/Tetris";
 
 const App = () => (
   <div className="App">
-    <Tetris />
+    <Routes>
+      <Route path="/" element={<StartPage />} />
+      <Route exact path="/game" element={<Tetris />} />
+    </Routes>
   </div>
 );
 
