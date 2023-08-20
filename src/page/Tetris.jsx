@@ -1,7 +1,7 @@
 import React from "react";
-import Stage from "./Stage";
-import Display from "./Display";
-import StartButton from "./StartButton";
+import Stage from "../components/Stage";
+import Display from "../components/Display";
+import StartButton from "../components/StartButton";
 
 const Tetris = ({ callback }) => {
   return (
