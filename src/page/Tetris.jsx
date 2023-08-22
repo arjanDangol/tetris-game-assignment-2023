@@ -15,7 +15,7 @@ import {
 // Components
 import Stage from "../components/Stage";
 import Display from "../components/Display";
-import StartButton from "../components/StartButton";
+import Button from "../components/Button";
 
 const Tetris = ({ callback }) => {
   const [dropTime, setDropTime] = useState(null);
@@ -106,7 +106,7 @@ const Tetris = ({ callback }) => {
               <Display text="Mode" />
             </div>
           )}
-          <StartButton callback={startGame} />
+          <Button callback={startGame} name={"Start Button"} />
         </aside>
       </StyledTetris>
     </StyledTetrisWrapper>

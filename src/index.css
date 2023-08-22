@@ -4,9 +4,14 @@
 
 body {
   margin: 0;
+  background-image: url("./assets/bg.jpg");
 }
 
 @font-face {
   font-family: 'Pixel';
   src: url('assets/font/Pixel-LCD-7.woff') format('woff');
+}
+
+.start-page {
+  font-family: Pixel, Arial, Helvetica, sans-serif;
 }
