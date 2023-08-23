@@ -50,8 +50,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     Normal
@@ -63,8 +63,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     Extended
@@ -91,8 +91,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     10 X 18
@@ -104,8 +104,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     12 X 20
@@ -117,8 +117,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     14 X 22
@@ -145,8 +145,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     Normal
@@ -158,8 +158,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     X1.5
@@ -171,8 +171,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     X2
@@ -199,8 +199,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     Player
@@ -212,8 +212,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     AI
@@ -240,8 +240,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     1
@@ -253,8 +253,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     2
@@ -266,8 +266,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     3
@@ -279,8 +279,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     4
@@ -292,8 +292,8 @@ const Configure = () => {
                   <span
                     className={`cursor-pointer p-2 border-4 rounded-lg ${
                       checked
-                        ? "bg-cyan-400 border-cyan-700"
-                        : "hover:bg-cyan-100 hover:text-black"
+                        ? "bg-orange-700 border-orange-900"
+                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
                     }`}
                   >
                     5

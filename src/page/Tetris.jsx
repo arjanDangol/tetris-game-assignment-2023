@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { createStage, checkCollision } from "../utils/gameHelper";
@@ -19,7 +19,7 @@ import Stage from "../components/Stage";
 import Display from "../components/Display";
 import Button from "../components/Button";
 
-const gameData = {
+const gameSettings = {
   score: "0",
   rows: "0",
   level: "1",
@@ -38,12 +38,7 @@ const Tetris = ({ callback }) => {
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage] = useStage(player, resetPlayer);
 
-  console.log("re-render");
-
   const toggleExitModal = () => {
-    if (!isPaused || exitModalOpen) {
-      togglePauseMode();
-    }
     setExitModalOpen(!exitModalOpen);
   };
 
@@ -67,7 +62,6 @@ const Tetris = ({ callback }) => {
     } else {
       // Game Over
       if (player.pos.y < 1) {
-        console.log("Game Over");
         setGameOver(true);
         setDropTime(null);
       }
@@ -89,7 +83,7 @@ const Tetris = ({ callback }) => {
   };
 
   const togglePauseMode = () => {
-    if (isPaused) {
+    if (!isPaused) {
       setDropTime(1000);
     } else {
       setDropTime(null);
@@ -99,7 +93,7 @@ const Tetris = ({ callback }) => {
 
   const move = ({ keyCode }) => {
     if (!gameOver) {
-      if (isPaused) {
+      if (!isPaused) {
         togglePauseMode();
       }
       if (keyCode === 37) {
@@ -115,11 +109,20 @@ const Tetris = ({ callback }) => {
         // Rotate block press "up key"
         playerRotate(stage, 1);
       } else if (keyCode === 80) {
-        // Pause game press "P"
+        // Pause game press "P key"
         togglePauseMode();
       }
     }
+    if (keyCode === 27) {
+      // Toggle exit game modal press "Esc key"
+      toggleExitModal();
+    }
   };
+  useEffect(() => {
+    if (!gameOver && (isPaused || !exitModalOpen)) {
+      togglePauseMode();
+    }
+  }, [exitModalOpen]);
 
   useInterval(() => {
     drop();
@@ -144,12 +147,12 @@ const Tetris = ({ callback }) => {
               <Display gameOver={gameOver} text="Game Over" />
             ) : (
               <div>
-                <Display text={`Group: ${gameData.group}`} />
-                <Display text={`Score: ${gameData.score}`} />
-                <Display text={`Rows: ${gameData.rows}`} />
-                <Display text={`Level: ${gameData.level}`} />
-                <Display text={`Game: ${gameData.game}`} />
-                <Display text={`Mode: ${gameData.mode}`} />
+                <Display text={`Group: ${gameSettings.group}`} />
+                <Display text={`Score: ${gameSettings.score}`} />
+                <Display text={`Rows: ${gameSettings.rows}`} />
+                <Display text={`Level: ${gameSettings.level}`} />
+                <Display text={`Game: ${gameSettings.game}`} />
+                <Display text={`Mode: ${gameSettings.mode}`} />
               </div>
             )}
             <Button callback={startGame} name={"Start"} />
