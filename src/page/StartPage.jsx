@@ -42,7 +42,7 @@ const StartPage = () => {
           <li>Mausham Kafle (s5274346)</li>
           <li>Sannat Vatsyan (s5245843)</li>
         </ul>
-        <div className=" w-2/5 ">
+        <div className=" w-2/5 text-center ">
           <Button name={"Play"} callback={goToGamePage} />
           <Button name={"Score"} callback={goToScorePage} />
           <Button name={"Configure"} callback={goToConfigurePage} />
