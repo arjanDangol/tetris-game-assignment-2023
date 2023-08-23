@@ -20,6 +20,7 @@ import Button from "../components/Button";
 const Tetris = ({ callback }) => {
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage] = useStage(player, resetPlayer);
@@ -67,8 +68,20 @@ const Tetris = ({ callback }) => {
     drop();
   };
 
+  const togglePauseMode = () => {
+    if (isPaused) {
+      setDropTime(1000);
+    } else {
+      setDropTime(null);
+    }
+    setIsPaused(!isPaused);
+  };
+
   const move = ({ keyCode }) => {
     if (!gameOver) {
+      if (isPaused) {
+        togglePauseMode();
+      }
       if (keyCode === 37) {
         movePlayer(-1);
       } else if (keyCode === 39) {
@@ -77,6 +90,8 @@ const Tetris = ({ callback }) => {
         dropPlayer();
       } else if (keyCode === 38) {
         playerRotate(stage, 1);
+      } else if (keyCode === 80) {
+        togglePauseMode();
       }
     }
   };
