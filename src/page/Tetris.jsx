@@ -7,12 +7,14 @@ import { createStage, checkCollision } from "../utils/gameHelper";
 import { useInterval } from "../hooks/useInterval";
 import { usePlayer } from "../hooks/usePlayer";
 import { useStage } from "../hooks/useStage";
+import { TETROMINOS } from "../utils/tetrominos";
 
 // Styled components
 import {
   StyledTetrisWrapper,
   StyledTetris,
 } from "../components/styles/StyledTetris";
+import { StyledCell } from "../components/styles/StyledCell";
 
 // Components
 import Stage from "../components/Stage";
@@ -142,6 +144,76 @@ const Tetris = ({ callback }) => {
       >
         <StyledTetris>
           <Stage stage={stage} />
+          <div className="flex flex-col ml-8">
+            <div className="w-full h-full bg-black border-gray-700 border-2 mb-8 grid text-white next-block-container relative">
+              <div className="absolute left-5 top-1"> Next Blocks </div>
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={"I"} color={TETROMINOS["I"].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={"I"} color={TETROMINOS["I"].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={"I"} color={TETROMINOS["I"].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={"I"} color={TETROMINOS["I"].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={"I"} color={TETROMINOS["I"].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={"I"} color={TETROMINOS["I"].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={"T"} color={TETROMINOS["T"].color} />
+              <StyledCell type={"T"} color={TETROMINOS["T"].color} />
+              <StyledCell type={"T"} color={TETROMINOS["T"].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={0} color={TETROMINOS[0].color} />
+              <StyledCell type={"T"} color={TETROMINOS["T"].color} />
+            </div>
+            <Button callback={startGame} name={"Start"} classes="mb-8" />
+            <Button callback={toggleExitModal} name={"Exit"} />
+          </div>
           <aside>
             {gameOver ? (
               <Display gameOver={gameOver} text="Game Over" />
@@ -155,8 +227,6 @@ const Tetris = ({ callback }) => {
                 <Display text={`Mode: ${gameSettings.mode}`} />
               </div>
             )}
-            <Button callback={startGame} name={"Start"} />
-            <Button callback={toggleExitModal} name={"Exit"} />
           </aside>
         </StyledTetris>
       </StyledTetrisWrapper>
