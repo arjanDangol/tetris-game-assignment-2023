@@ -11,11 +11,12 @@ Mausham Kafle ()
 Sannat Vatsyan () -->
 
 ### Students
-1. Arjan Dangol	    Student ID: s5295636	Course Code: 7805ICT 
+1. Arjan Dangol, Student ID: s5295636, Course Code: 7805ICT 
 
-2. Mausham Kafle	Student ID: s5274346	Course Code: 3815ICT 
+2. Mausham Kafle, Student ID: s5274346, Course Code: 3815ICT 
 
-3. Sannat Vatsyan	Student ID: s5245843	Course Code: 3815ICT
+3. Sannat Vatsyan, Student ID: s5245843, Course Code: 3815ICT
+
 
 ## Script to run the game
 
