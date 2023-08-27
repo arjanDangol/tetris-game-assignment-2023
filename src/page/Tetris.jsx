@@ -40,7 +40,7 @@ const Tetris = ({ callback }) => {
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage] = useStage(player, resetPlayer);
 
-  const toggleExitModal = () => {
+  const toggleEndModal = () => {
     setExitModalOpen(!exitModalOpen);
   };
 
@@ -117,7 +117,7 @@ const Tetris = ({ callback }) => {
     }
     if (keyCode === 27) {
       // Toggle exit game modal press "Esc key"
-      toggleExitModal();
+      toggleEndModal();
     }
   };
   useEffect(() => {
@@ -212,7 +212,7 @@ const Tetris = ({ callback }) => {
               <StyledCell type={"T"} color={TETROMINOS["T"].color} />
             </div>
             <Button callback={startGame} name={"Start"} classes="mb-8" />
-            <Button callback={toggleExitModal} name={"Exit"} />
+            <Button callback={toggleEndModal} name={"End"} />
           </div>
           <aside>
             {gameOver ? (
@@ -233,7 +233,7 @@ const Tetris = ({ callback }) => {
 
       {/* Modal Implementation */}
       <Transition appear show={exitModalOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={toggleExitModal}>
+        <Dialog as="div" className="relative z-10" onClose={toggleEndModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -276,7 +276,7 @@ const Tetris = ({ callback }) => {
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={toggleExitModal}
+                      onClick={toggleEndModal}
                     >
                       No
                     </button>
