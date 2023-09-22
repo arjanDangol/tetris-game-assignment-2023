@@ -22,7 +22,7 @@ export const useStage = (player, resetPlayer) => {
           }
         });
       });
-      // Then check if we got some score if collided
+      // Then check if there is any collision
       if (player.collided) {
         resetPlayer();
       }
