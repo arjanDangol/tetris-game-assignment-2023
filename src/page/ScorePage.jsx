@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 
-const Score = () => {
+const ScorePage = () => {
   const navigate = useNavigate();
   const goToStartPage = () => {
     navigate("/");
@@ -65,4 +65,4 @@ const Score = () => {
   );
 };
 
-export default Score;
+export default ScorePage;

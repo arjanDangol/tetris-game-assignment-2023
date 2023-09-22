@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { RadioGroup } from "@headlessui/react";
 import Button from "../components/Button";
 
-const Configure = () => {
+const ConfigurePage = () => {
   const navigate = useNavigate();
   const [gameType, setGameType] = useState("normal");
   const [stageSize, setStageSize] = useState("regular");
@@ -318,4 +318,4 @@ const Configure = () => {
   );
 };
 
-export default Configure;
+export default ConfigurePage;

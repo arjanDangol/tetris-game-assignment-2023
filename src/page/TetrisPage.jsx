@@ -30,7 +30,7 @@ const gameSettings = {
   group: "11",
 };
 
-const Tetris = ({ callback }) => {
+const TetrisPage = ({ callback }) => {
   const navigate = useNavigate();
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
@@ -291,4 +291,4 @@ const Tetris = ({ callback }) => {
   );
 };
 
-export default Tetris;
+export default TetrisPage;
