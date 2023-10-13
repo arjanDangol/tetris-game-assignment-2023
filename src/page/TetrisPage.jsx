@@ -11,6 +11,7 @@ import { useGameStatus } from "../hooks/useGameStatus";
 import useHighScores from "../hooks/useHighScore";
 import { TETROMINOS } from "../utils/tetrominos";
 import { randomTetromino } from "../utils/tetrominos";
+import useGameConfig from "../hooks/useGameConfig";
 
 // Styled components
 import {
@@ -45,6 +46,7 @@ const TetrisPage = ({ callback }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [exitModalOpen, setExitModalOpen] = useState(false);
   const [highScoreOpen, setHighScoreOpen] = useState(false);
+  const [gameConfig, updateGameConfig] = useGameConfig();
 
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
@@ -54,6 +56,16 @@ const TetrisPage = ({ callback }) => {
   const [highScores, updateHighScores] = useHighScores();
   const [playerName, setPlayerName] = useState("");
   const [nextTetromino, setNextTetromino] = useState(randomTetromino());
+  useEffect(() => {
+    console.log({ gameConfig });
+  }, [gameConfig]);
+  useEffect(() => {
+    const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
+    console.log({ storedGameConfig });
+    if (storedGameConfig) {
+      updateGameConfig(storedGameConfig);
+    }
+  }, []);
 
   const toggleEndModal = () => {
     setExitModalOpen(!exitModalOpen);
@@ -242,7 +254,7 @@ const TetrisPage = ({ callback }) => {
         <StyledTetris>
           <Stage stage={stage} />
           <div className="flex flex-col ml-8">
-            <div className="w-full h-full bg-black border-gray-700 border-2 mb-8 grid text-white next-block-container relative">
+            {/* <div className="w-full h-full bg-black border-gray-700 border-2 mb-8 grid text-white next-block-container relative">
               <div className="absolute left-5 top-1"> Next Blocks </div>
               {nextTetromino.next.shape.map((row, y) =>
                 row.map((cell, x) => (
@@ -253,8 +265,8 @@ const TetrisPage = ({ callback }) => {
                   />
                 ))
               )}
-            </div>
-            {/* <div className="w-full h-full bg-black border-gray-700 border-2 mb-8 grid text-white next-block-container relative">
+            </div> */}
+            <div className="w-full h-full bg-black border-gray-700 border-2 mb-8 grid text-white next-block-container relative">
               <div className="absolute left-5 top-1"> Next Blocks </div>
               <StyledCell type={0} color={TETROMINOS[0].color} />
               <StyledCell type={0} color={TETROMINOS[0].color} />
@@ -319,7 +331,7 @@ const TetrisPage = ({ callback }) => {
               <StyledCell type={0} color={TETROMINOS[0].color} />
               <StyledCell type={0} color={TETROMINOS[0].color} />
               <StyledCell type={"T"} color={TETROMINOS["T"].color} />
-            </div> */}
+            </div>
             <Button callback={startGame} name={"Start"} classes="mb-8" />
             <Button callback={toggleEndModal} name={"End"} />
           </div>
@@ -332,8 +344,8 @@ const TetrisPage = ({ callback }) => {
                 <Display text={`Score: ${score}`} />
                 <Display text={`Rows: ${rows}`} />
                 <Display text={`Level: ${level}`} />
-                <Display text={`Game: ${gameSettings.game}`} />
-                <Display text={`Mode: ${gameSettings.mode}`} />
+                <Display text={`Game: ${gameConfig.gameType}`} />
+                <Display text={`Mode: ${gameConfig.gameMode}`} />
               </div>
             )}
           </aside>

@@ -5,6 +5,8 @@ import { Dialog, Transition } from "@headlessui/react";
 
 import backgroundMusic from "../utils/backgroundMusic.wav";
 
+import useGameConfig from "../hooks/useGameConfig";
+
 const StartPage = () => {
   // const backgroundMusicAudio = new Audio(backgroundMusic);
   const navigate = useNavigate();
@@ -12,6 +14,14 @@ const StartPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [bgAudio] = useState(new Audio(backgroundMusic));
+  const [gameConfig, updateGameConfig] = useGameConfig();
+
+  useEffect(() => {
+    const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
+    if (storedGameConfig) {
+      updateGameConfig(storedGameConfig);
+    }
+  }, []);
 
   useEffect(() => {
     // Set up event listener for when audio is ended to loop the music

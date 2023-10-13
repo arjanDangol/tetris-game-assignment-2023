@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RadioGroup } from "@headlessui/react";
 import Button from "../components/Button";
+import useGameConfig from "../hooks/useGameConfig";
 
 const ConfigurePage = () => {
   const navigate = useNavigate();
-  const [gameType, setGameType] = useState("normal");
-  const [stageSize, setStageSize] = useState("regular");
-  const [speed, setSpeed] = useState("normal");
-  const [gameMode, setGameMode] = useState("player");
-  const [level, setLevel] = useState("1");
+  const [gameConfig, updateGameConfig] = useGameConfig();
+  // const [gameType, setGameType] = useState("normal");
+  // const [stageSize, setStageSize] = useState("regular");
+  // const [speed, setSpeed] = useState("normal");
+  // const [gameMode, setGameMode] = useState("player");
+  // const [level, setLevel] = useState("1");
   const [isSaved, setIsSaved] = useState(false);
 
   const saveConfig = () => {
@@ -17,6 +19,7 @@ const ConfigurePage = () => {
       return false;
     } else {
       setIsSaved(true);
+      localStorage.setItem("gameConfig", JSON.stringify(gameConfig));
     }
   };
 
@@ -24,10 +27,11 @@ const ConfigurePage = () => {
     navigate("/");
   };
   useEffect(() => {
+    console.log({ gameConfig });
     if (isSaved) {
       setIsSaved(false);
     }
-  }, [gameType, stageSize, speed, gameMode, level]);
+  }, [gameConfig]);
 
   return (
     <div className="w-screen h-screen overflow-hidden bg-cover flex justify-center items-center start-page">
@@ -38,8 +42,8 @@ const ConfigurePage = () => {
         <div className=" w-full mb-8 ">
           <RadioGroup
             className="flex flex-col"
-            value={gameType}
-            onChange={setGameType}
+            value={gameConfig.gameType}
+            onChange={(value) => updateGameConfig({ gameType: value })}
           >
             <RadioGroup.Label className="mb-4 text-amber-300">
               Game Type:
@@ -79,8 +83,8 @@ const ConfigurePage = () => {
         <div className=" w-full mb-8 ">
           <RadioGroup
             className="flex flex-col"
-            value={stageSize}
-            onChange={setStageSize}
+            value={gameConfig.stageSize}
+            onChange={(value) => updateGameConfig({ stageSize: value })}
           >
             <RadioGroup.Label className="mb-4 text-amber-300">
               Stage Dimension:
@@ -133,8 +137,8 @@ const ConfigurePage = () => {
         <div className=" w-full mb-8 ">
           <RadioGroup
             className="flex flex-col"
-            value={speed}
-            onChange={setSpeed}
+            value={gameConfig.speed}
+            onChange={(value) => updateGameConfig({ speed: value })}
           >
             <RadioGroup.Label className="mb-4 text-amber-300">
               Speed:
@@ -187,8 +191,8 @@ const ConfigurePage = () => {
         <div className=" w-full mb-8 ">
           <RadioGroup
             className="flex flex-col"
-            value={gameMode}
-            onChange={setGameMode}
+            value={gameConfig.gameMode}
+            onChange={(value) => updateGameConfig({ gameMode: value })}
           >
             <RadioGroup.Label className="mb-4 text-amber-300">
               Game Mode:
@@ -228,8 +232,8 @@ const ConfigurePage = () => {
         <div className=" w-full mb-8 ">
           <RadioGroup
             className="flex flex-col"
-            value={level}
-            onChange={setLevel}
+            value={gameConfig.level}
+            onChange={(value) => updateGameConfig({ level: value })}
           >
             <RadioGroup.Label className="mb-4 text-amber-300">
               Game Level:
@@ -271,32 +275,6 @@ const ConfigurePage = () => {
                     }`}
                   >
                     3
-                  </span>
-                )}
-              </RadioGroup.Option>
-              <RadioGroup.Option value="4" className=" mr-4 ">
-                {({ checked }) => (
-                  <span
-                    className={`cursor-pointer p-2 border-4 rounded-lg ${
-                      checked
-                        ? "bg-orange-700 border-orange-900"
-                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
-                    }`}
-                  >
-                    4
-                  </span>
-                )}
-              </RadioGroup.Option>
-              <RadioGroup.Option value="5">
-                {({ checked }) => (
-                  <span
-                    className={`cursor-pointer p-2 border-4 rounded-lg ${
-                      checked
-                        ? "bg-orange-700 border-orange-900"
-                        : "hover:bg-orange-500 hover:border-orange-900 hover:text-black"
-                    }`}
-                  >
-                    5
                   </span>
                 )}
               </RadioGroup.Option>

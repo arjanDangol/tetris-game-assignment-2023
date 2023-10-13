@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { TETROMINOS, randomTetromino } from "../utils/tetrominos";
 import { STAGE_WIDTH, checkCollision } from "../utils/gameHelper";
+import useGameConfig from "../hooks/useGameConfig";
 
 export const usePlayer = () => {
   const [player, setPlayer] = useState({
@@ -8,6 +9,8 @@ export const usePlayer = () => {
     tetromino: TETROMINOS[0].shape,
     collided: false,
   });
+
+  const [gameConfig, updateGameConfig] = useGameConfig();
 
   const rotate = (matrix, dir) => {
     // Transpose the rows so that they become cols
