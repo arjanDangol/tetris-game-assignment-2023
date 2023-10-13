@@ -44,7 +44,10 @@ export const useStage = (player, resetPlayer) => {
       return newStage;
     };
 
-    setStage((prev) => updateStage(prev));
+    // setStage((prev) => updateStage(prev));
+    setStage((prev) => {
+      return updateStage(prev);
+    });
   }, [player, resetPlayer, rowsCleared]);
 
   return [stage, setStage, rowsCleared];
