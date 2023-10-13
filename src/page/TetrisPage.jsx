@@ -7,7 +7,10 @@ import { createStage, checkCollision } from "../utils/gameHelper";
 import { useInterval } from "../hooks/useInterval";
 import { usePlayer } from "../hooks/usePlayer";
 import { useStage } from "../hooks/useStage";
+import { useGameStatus } from "../hooks/useGameStatus";
+import useHighScores from "../hooks/useHighScore";
 import { TETROMINOS } from "../utils/tetrominos";
+import { randomTetromino } from "../utils/tetrominos";
 
 // Styled components
 import {
@@ -15,6 +18,9 @@ import {
   StyledTetris,
 } from "../components/styles/StyledTetris";
 import { StyledCell } from "../components/styles/StyledCell";
+
+import gameOverSound from "../utils/gameOverSound.mp3";
+import rowsClearedSound from "../utils/rowsClearedSound.mp4";
 
 // Components
 import Stage from "../components/Stage";
@@ -31,17 +37,33 @@ const gameSettings = {
 };
 
 const TetrisPage = ({ callback }) => {
+  // const gameOverAudio = new Audio(gameOverSound);
+  // const rowsClearedSound = new Audio(rowsClearedSound);
   const navigate = useNavigate();
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [exitModalOpen, setExitModalOpen] = useState(false);
+  const [highScoreOpen, setHighScoreOpen] = useState(false);
 
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
-  const [stage, setStage] = useStage(player, resetPlayer);
+  const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
+  const [score, setScore, rows, setRows, level, setLevel] =
+    useGameStatus(rowsCleared);
+
+  const [highScores, updateHighScores] = useHighScores();
+  const [playerName, setPlayerName] = useState("");
+  const [nextTetromino, setNextTetromino] = useState(randomTetromino());
 
   const toggleEndModal = () => {
     setExitModalOpen(!exitModalOpen);
+  };
+
+  const toggleHighScoreModal = () => {
+    setHighScoreOpen(!highScoreOpen);
+    if (highScoreOpen && score > 0) {
+      navigate("/");
+    }
   };
 
   const movePlayer = (dir) => {
@@ -56,11 +78,26 @@ const TetrisPage = ({ callback }) => {
     setDropTime(1000);
     resetPlayer();
     setGameOver(false);
+    setScore(0);
+    setRows(0);
+    setLevel(0);
   };
 
   const drop = () => {
+    // Increase level when player has cleared 2 rows
+    if (rows > (level + 1) * 2) {
+      setLevel((prev) => prev + 1);
+
+      // Also increase speed
+      setDropTime(1000 / (level + 1) + 200);
+    }
+
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
       updatePlayerPos({ x: 0, y: 1, collided: false });
+      // if (player.pos.y === 0 && player) {
+      //   console.log("y position: ", player.pos.y);
+      //   updateNextTetromino();
+      // }
     } else {
       // Game Over
       if (player.pos.y < 1) {
@@ -74,7 +111,7 @@ const TetrisPage = ({ callback }) => {
   const keyUp = ({ keyCode }) => {
     if (!gameOver) {
       if (keyCode === 40) {
-        setDropTime(1000);
+        setDropTime(1000 / (level + 1) + 200);
       }
     }
   };
@@ -131,8 +168,68 @@ const TetrisPage = ({ callback }) => {
   }, dropTime);
 
   const endGame = () => {
-    navigate("/");
+    setGameOver(true);
+    // navigate("/");
   };
+
+  const submitHighScore = () => {
+    const newScore = {
+      id: Math.random().toString(36).substr(2, 9), // Generate a random ID for the new score
+      name: playerName,
+      score: score, // Random score for demonstration
+    };
+    updateHighScores(newScore);
+    navigate("/score");
+  };
+
+  useEffect(() => {
+    if (gameOver) {
+      toggleHighScoreModal();
+      const gameOverAudio = new Audio(gameOverSound);
+      gameOverAudio.loop = false; // Loop the background music
+      gameOverAudio.play(); // Play background music if it's on
+
+      // Clean up audio element when the component unmounts or music status changes
+      return () => {
+        gameOverAudio.pause();
+        gameOverAudio.currentTime = 0; // Reset music playback position
+      };
+    }
+  }, [gameOver]);
+
+  // // Update next tetromino when player's Y position is less than 1
+  // useEffect(() => {
+  //   if (player.pos.y < 1) {
+  //     setNextTetromino(randomTetromino());
+  //   }
+  // }, [player.pos.y]);
+
+  // // Handle dropping the tetromino every second
+  // useInterval(() => {
+  //   updateNextTetromino();
+  //   // Drop the current tetromino
+  //   if (!checkCollision(player, stage, { x: 0, y: 1 })) {
+  //     updatePlayerPos({ x: 0, y: 1, collided: false });
+  //   } else {
+  //     // Lock the tetromino in the stage if it collides
+  //     updatePlayerPos({ x: 0, y: 0, collided: true });
+  //     // Generate a new random tetromino for the player
+  //     resetPlayer();
+  //   }
+  // }, 1000);
+  useEffect(() => {
+    if (rowsCleared > 0) {
+      const rowsClearedAudio = new Audio(rowsClearedSound);
+      rowsClearedAudio.loop = false; // Loop the background music
+      rowsClearedAudio.play(); // Play background music if it's on
+
+      // Clean up audio element when the component unmounts or music status changes
+      // return () => {
+      //   rowsClearedAudio.pause();
+      //   rowsClearedAudio.currentTime = 0; // Reset music playback position
+      // };
+    }
+  }, [rowsCleared]);
 
   return (
     <>
@@ -146,6 +243,18 @@ const TetrisPage = ({ callback }) => {
           <Stage stage={stage} />
           <div className="flex flex-col ml-8">
             <div className="w-full h-full bg-black border-gray-700 border-2 mb-8 grid text-white next-block-container relative">
+              <div className="absolute left-5 top-1"> Next Blocks </div>
+              {nextTetromino.next.shape.map((row, y) =>
+                row.map((cell, x) => (
+                  <StyledCell
+                    key={x + y * 2}
+                    type={cell === 0 ? 0 : nextTetromino.next.shape[y][x]}
+                    color={cell === 0 ? "0, 0, 0" : nextTetromino.next.color}
+                  />
+                ))
+              )}
+            </div>
+            {/* <div className="w-full h-full bg-black border-gray-700 border-2 mb-8 grid text-white next-block-container relative">
               <div className="absolute left-5 top-1"> Next Blocks </div>
               <StyledCell type={0} color={TETROMINOS[0].color} />
               <StyledCell type={0} color={TETROMINOS[0].color} />
@@ -210,7 +319,7 @@ const TetrisPage = ({ callback }) => {
               <StyledCell type={0} color={TETROMINOS[0].color} />
               <StyledCell type={0} color={TETROMINOS[0].color} />
               <StyledCell type={"T"} color={TETROMINOS["T"].color} />
-            </div>
+            </div> */}
             <Button callback={startGame} name={"Start"} classes="mb-8" />
             <Button callback={toggleEndModal} name={"End"} />
           </div>
@@ -220,9 +329,9 @@ const TetrisPage = ({ callback }) => {
             ) : (
               <div>
                 <Display text={`Group: ${gameSettings.group}`} />
-                <Display text={`Score: ${gameSettings.score}`} />
-                <Display text={`Rows: ${gameSettings.rows}`} />
-                <Display text={`Level: ${gameSettings.level}`} />
+                <Display text={`Score: ${score}`} />
+                <Display text={`Rows: ${rows}`} />
+                <Display text={`Level: ${level}`} />
                 <Display text={`Game: ${gameSettings.game}`} />
                 <Display text={`Mode: ${gameSettings.mode}`} />
               </div>
@@ -279,6 +388,100 @@ const TetrisPage = ({ callback }) => {
                       onClick={toggleEndModal}
                     >
                       No
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      {/* Modal Implementation */}
+      <Transition appear show={highScoreOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={toggleHighScoreModal}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-zinc-600 text-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-center"
+                  >
+                    High Score
+                  </Dialog.Title>
+                  {score > 0 && (
+                    <div className="mt-4">
+                      <input
+                        type="text"
+                        className="w-full px-4 py-2 rounded-md border border-gray-300 bg-gray-100 focus:ring-blue-500 focus:border-blue-500 text-black"
+                        placeholder="Enter your name"
+                        value={playerName}
+                        onChange={(e) => setPlayerName(e.target.value)}
+                      />
+                    </div>
+                  )}
+                  {score === 0 && (
+                    <div className="mt-4">
+                      <p>Your score is 0. Please try again.</p>
+                    </div>
+                  )}
+
+                  <div className="mt-10 flex justify-evenly">
+                    {score > 0 && (
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={submitHighScore}
+                      >
+                        Submit
+                      </button>
+                    )}
+                    {score === 0 && (
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={() => {
+                          toggleHighScoreModal();
+                          startGame();
+                        }}
+                      >
+                        Start Over
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={() => {
+                        toggleHighScoreModal();
+                        navigate("/");
+                      }}
+                    >
+                      Exit Game
                     </button>
                   </div>
                 </Dialog.Panel>
