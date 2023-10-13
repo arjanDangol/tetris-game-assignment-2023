@@ -6,6 +6,7 @@ export const useStage = (player, resetPlayer) => {
   const [rowsCleared, setRowsCleared] = useState(0);
 
   useEffect(() => {
+    console.log("Stage rows cleared: ", rowsCleared);
     setRowsCleared(0);
 
     const sweepRows = (newStage) =>
@@ -45,7 +46,7 @@ export const useStage = (player, resetPlayer) => {
     };
 
     setStage((prev) => updateStage(prev));
-  }, [player, resetPlayer]);
+  }, [player, resetPlayer, rowsCleared]);
 
   return [stage, setStage, rowsCleared];
 };

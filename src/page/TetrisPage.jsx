@@ -7,6 +7,7 @@ import { createStage, checkCollision } from "../utils/gameHelper";
 import { useInterval } from "../hooks/useInterval";
 import { usePlayer } from "../hooks/usePlayer";
 import { useStage } from "../hooks/useStage";
+import { useGameStatus } from "../hooks/useGameStatus";
 import { TETROMINOS } from "../utils/tetrominos";
 
 // Styled components
@@ -38,7 +39,13 @@ const TetrisPage = ({ callback }) => {
   const [exitModalOpen, setExitModalOpen] = useState(false);
 
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
-  const [stage, setStage] = useStage(player, resetPlayer);
+  const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
+  const [score, setScore, rows, setRows, level, setLevel] =
+    useGameStatus(rowsCleared);
+
+  useEffect(() => {
+    console.log({ rowsCleared });
+  }, [rowsCleared]);
 
   const toggleEndModal = () => {
     setExitModalOpen(!exitModalOpen);
@@ -56,9 +63,20 @@ const TetrisPage = ({ callback }) => {
     setDropTime(1000);
     resetPlayer();
     setGameOver(false);
+    setScore(0);
+    setRows(0);
+    setLevel(0);
   };
 
   const drop = () => {
+    // Increase level when player has cleared 10 rows
+    if (rows > (level + 1) * 10) {
+      setLevel((prev) => prev + 1);
+
+      // Also increase speed
+      setDropTime(1000 / (level + 1) + 200);
+    }
+
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
       updatePlayerPos({ x: 0, y: 1, collided: false });
     } else {
@@ -74,7 +92,7 @@ const TetrisPage = ({ callback }) => {
   const keyUp = ({ keyCode }) => {
     if (!gameOver) {
       if (keyCode === 40) {
-        setDropTime(1000);
+        setDropTime(1000 / (level + 1) + 200);
       }
     }
   };
@@ -220,9 +238,9 @@ const TetrisPage = ({ callback }) => {
             ) : (
               <div>
                 <Display text={`Group: ${gameSettings.group}`} />
-                <Display text={`Score: ${gameSettings.score}`} />
-                <Display text={`Rows: ${gameSettings.rows}`} />
-                <Display text={`Level: ${gameSettings.level}`} />
+                <Display text={`Score: ${score}`} />
+                <Display text={`Rows: ${rows}`} />
+                <Display text={`Level: ${level}`} />
                 <Display text={`Game: ${gameSettings.game}`} />
                 <Display text={`Mode: ${gameSettings.mode}`} />
               </div>
