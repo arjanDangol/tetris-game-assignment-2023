@@ -1,12 +1,40 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import { Dialog, Transition } from "@headlessui/react";
 
+import backgroundMusic from "../utils/backgroundMusic.wav";
+
 const StartPage = () => {
+  // const backgroundMusicAudio = new Audio(backgroundMusic);
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [bgAudio] = useState(new Audio(backgroundMusic));
+
+  useEffect(() => {
+    // Set up event listener for when audio is ended to loop the music
+    bgAudio.addEventListener("ended", () => {
+      bgAudio.play();
+    });
+
+    // Clean up event listener when the component unmounts
+    return () => {
+      bgAudio.removeEventListener("ended", () => {
+        bgAudio.play();
+      });
+    };
+  }, [bgAudio]);
+
+  const toggleBackgroundMusic = () => {
+    if (isMusicPlaying) {
+      bgAudio.pause();
+    } else {
+      bgAudio.play();
+    }
+    setIsMusicPlaying(!isMusicPlaying);
+  };
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -49,6 +77,16 @@ const StartPage = () => {
           <Button name={"Exit"} callback={toggleModal} />
         </div>
       </div>
+      <button
+        className="fixed bottom-5 right-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none"
+        onClick={toggleBackgroundMusic}
+      >
+        {isMusicPlaying ? "Pause Music" : "Play Music"}
+      </button>
+      {/* <button
+        className="fixed bottom-5 right-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none"
+        onClick={isMusicPlaying ? pauseBackgroundMusic : playBackgroundMusic}
+      ></button> */}
       {/* Modal Implementation */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={toggleModal}>
