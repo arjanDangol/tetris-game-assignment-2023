@@ -8,6 +8,7 @@ import { useInterval } from "../hooks/useInterval";
 import { usePlayer } from "../hooks/usePlayer";
 import { useStage } from "../hooks/useStage";
 import { useGameStatus } from "../hooks/useGameStatus";
+import useHighScores from "../hooks/useHighScore";
 import { TETROMINOS } from "../utils/tetrominos";
 
 // Styled components
@@ -37,18 +38,25 @@ const TetrisPage = ({ callback }) => {
   const [gameOver, setGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [exitModalOpen, setExitModalOpen] = useState(false);
+  const [highScoreOpen, setHighScoreOpen] = useState(false);
 
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
   const [score, setScore, rows, setRows, level, setLevel] =
     useGameStatus(rowsCleared);
 
-  useEffect(() => {
-    console.log({ rowsCleared });
-  }, [rowsCleared]);
+  const [highScores, updateHighScores] = useHighScores();
+  const [playerName, setPlayerName] = useState("");
 
   const toggleEndModal = () => {
     setExitModalOpen(!exitModalOpen);
+  };
+
+  const toggleHighScoreModal = () => {
+    setHighScoreOpen(!highScoreOpen);
+    if (highScoreOpen && score > 0) {
+      navigate("/");
+    }
   };
 
   const movePlayer = (dir) => {
@@ -69,8 +77,8 @@ const TetrisPage = ({ callback }) => {
   };
 
   const drop = () => {
-    // Increase level when player has cleared 10 rows
-    if (rows > (level + 1) * 10) {
+    // Increase level when player has cleared 2 rows
+    if (rows > (level + 1) * 2) {
       setLevel((prev) => prev + 1);
 
       // Also increase speed
@@ -149,8 +157,26 @@ const TetrisPage = ({ callback }) => {
   }, dropTime);
 
   const endGame = () => {
-    navigate("/");
+    setGameOver(true);
+    // navigate("/");
   };
+
+  const submitHighScore = () => {
+    const newScore = {
+      id: Math.random().toString(36).substr(2, 9), // Generate a random ID for the new score
+      name: playerName,
+      score: score, // Random score for demonstration
+    };
+    updateHighScores(newScore);
+    navigate("/score");
+  };
+
+  useEffect(() => {
+    if (gameOver) {
+      console.log({ gameOver });
+      toggleHighScoreModal();
+    }
+  }, [gameOver]);
 
   return (
     <>
@@ -297,6 +323,100 @@ const TetrisPage = ({ callback }) => {
                       onClick={toggleEndModal}
                     >
                       No
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      {/* Modal Implementation */}
+      <Transition appear show={highScoreOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={toggleHighScoreModal}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-zinc-600 text-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-center"
+                  >
+                    High Score
+                  </Dialog.Title>
+                  {score > 0 && (
+                    <div className="mt-4">
+                      <input
+                        type="text"
+                        className="w-full px-4 py-2 rounded-md border border-gray-300 bg-gray-100 focus:ring-blue-500 focus:border-blue-500 text-black"
+                        placeholder="Enter your name"
+                        value={playerName}
+                        onChange={(e) => setPlayerName(e.target.value)}
+                      />
+                    </div>
+                  )}
+                  {score === 0 && (
+                    <div className="mt-4">
+                      <p>Your score is 0. Please try again.</p>
+                    </div>
+                  )}
+
+                  <div className="mt-10 flex justify-evenly">
+                    {score > 0 && (
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={submitHighScore}
+                      >
+                        Submit
+                      </button>
+                    )}
+                    {score === 0 && (
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={() => {
+                          toggleHighScoreModal();
+                          startGame();
+                        }}
+                      >
+                        Start Over
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={() => {
+                        toggleHighScoreModal();
+                        navigate("/");
+                      }}
+                    >
+                      Exit Game
                     </button>
                   </div>
                 </Dialog.Panel>
