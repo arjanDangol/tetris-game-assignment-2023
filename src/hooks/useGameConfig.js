@@ -18,17 +18,18 @@ const useGameConfig = () => {
   });
 
   const updateGameConfig = (newConfig) => {
+    console.log({newConfig});
     setGameConfig({ ...gameConfig, ...newConfig });
   };
 
-  useEffect(() => {
-    const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
-    if (storedGameConfig) {
-      setGameConfig(storedGameConfig);
-    } else {
-      setGameConfig(configData);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
+  //   if (storedGameConfig) {
+  //     setGameConfig(storedGameConfig);
+  //   } else {
+  //     setGameConfig(configData);
+  //   }
+  // }, []);
 
   return [gameConfig, updateGameConfig];
 };

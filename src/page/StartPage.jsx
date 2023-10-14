@@ -20,6 +20,7 @@ const StartPage = () => {
     const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
     if (storedGameConfig) {
       updateGameConfig(storedGameConfig);
+      console.log({gameConfig, storedGameConfig})
     }
   }, []);
 

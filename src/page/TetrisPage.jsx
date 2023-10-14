@@ -9,7 +9,7 @@ import { usePlayer } from "../hooks/usePlayer";
 import { useStage } from "../hooks/useStage";
 import { useGameStatus } from "../hooks/useGameStatus";
 import useHighScores from "../hooks/useHighScore";
-import { TETROMINOS } from "../utils/tetrominos";
+import { TETROMINOS, TETROMINOS_EXTENDED } from "../utils/tetrominos";
 import { randomTetromino } from "../utils/tetrominos";
 import useGameConfig from "../hooks/useGameConfig";
 
@@ -48,24 +48,43 @@ const TetrisPage = ({ callback }) => {
   const [highScoreOpen, setHighScoreOpen] = useState(false);
   const [gameConfig, updateGameConfig] = useGameConfig();
 
-  const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
+  const [player, updatePlayerPos, resetPlayer, playerRotate, setPlayer] = usePlayer(localStorage.getItem("gameConfig"));
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
   const [score, setScore, rows, setRows, level, setLevel] =
     useGameStatus(rowsCleared);
 
   const [highScores, updateHighScores] = useHighScores();
   const [playerName, setPlayerName] = useState("");
-  const [nextTetromino, setNextTetromino] = useState(randomTetromino());
-  useEffect(() => {
-    console.log({ gameConfig });
-  }, [gameConfig]);
+  const [nextTetromino, setNextTetromino] = useState(randomTetromino(localStorage.getItem("gameConfig").gameType));
+  
   useEffect(() => {
     const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
     console.log({ storedGameConfig });
     if (storedGameConfig) {
       updateGameConfig(storedGameConfig);
     }
+    setLevel(parseInt(storedGameConfig.level))
+    console.log({gameConfig})
+    if (storedGameConfig) {
+      if (storedGameConfig.gameType === "normal") {
+        const newTetromino = {tetromino: TETROMINOS[0].shape}
+        setPlayer({ ...player, ...newTetromino });
+      } else {
+        const newTetromino = {tetromino: TETROMINOS_EXTENDED[0].shape}
+        setPlayer({ ...player, ...newTetromino });
+      }
+    }
   }, []);
+
+  useEffect(() => {
+    setLevel(parseInt(gameConfig.level));
+    console.log({gameConfig})
+  }, [gameConfig]);
+
+  useEffect(() => {
+    console.log({level})
+  }, [level]);
+
 
   const toggleEndModal = () => {
     setExitModalOpen(!exitModalOpen);
@@ -92,17 +111,16 @@ const TetrisPage = ({ callback }) => {
     setGameOver(false);
     setScore(0);
     setRows(0);
-    setLevel(0);
+    setLevel(parseInt(gameConfig.level));
   };
 
   const drop = () => {
     // Increase level when player has cleared 2 rows
-    if (rows > (level + 1) * 2) {
+    if (rows > (level) * 2) {
       setLevel((prev) => prev + 1);
-
-      // Also increase speed
-      setDropTime(1000 / (level + 1) + 200);
     }
+    // Also increase speed
+    setDropTime(1000 / (level + 1) + 200);
 
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
       updatePlayerPos({ x: 0, y: 1, collided: false });

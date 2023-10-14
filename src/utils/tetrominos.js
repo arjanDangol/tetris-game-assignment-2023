@@ -142,18 +142,19 @@ export const TETROMINOS_EXTENDED = {
     color: "80, 227, 230",
   },
 };
-export const randomTetromino = () => {
+export const randomTetromino = (gameType) => {
   // const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
   const tetrominos = "IJLOSTZ";
-  // const tetrominosExtended = "IJLOSTZQW";
+  const tetrominosExtended = "IJLOSTZQW";
   const randTetromino =
     tetrominos[Math.floor(Math.random() * tetrominos.length)];
-  // const randTetrominoExtended =
-  //   tetrominosExtended[Math.floor(Math.random() * tetrominosExtended.length)];
+  const randTetrominoExtended =
+    tetrominosExtended[Math.floor(Math.random() * tetrominosExtended.length)];
   const tetromino = TETROMINOS[randTetromino];
-  // const tetrominoExtended = TETROMINOS[randTetrominoExtended];
+  const tetrominoExtended = TETROMINOS_EXTENDED[randTetrominoExtended];
+  const currentTetromino = gameType === "normal" ? tetromino : tetrominoExtended
   return {
-    current: tetromino,
+    current: currentTetromino,
     next: tetromino,
   };
 };

@@ -1,16 +1,27 @@
-import { useState, useCallback } from "react";
-import { TETROMINOS, randomTetromino } from "../utils/tetrominos";
+import { useState, useCallback, useEffect } from "react";
+import { TETROMINOS,TETROMINOS_EXTENDED, randomTetromino } from "../utils/tetrominos";
 import { STAGE_WIDTH, checkCollision } from "../utils/gameHelper";
 import useGameConfig from "../hooks/useGameConfig";
 
-export const usePlayer = () => {
+export const usePlayer = (gameConfig) => {
   const [player, setPlayer] = useState({
     pos: { x: 0, y: 0 },
+    // tetromino: TETROMINOS_EXTENDED[0].shape,
     tetromino: TETROMINOS[0].shape,
     collided: false,
   });
 
-  const [gameConfig, updateGameConfig] = useGameConfig();
+  // useEffect(() => {
+  //   if (gameConfig) {
+  //     if (gameConfig.gameType === "normal") {
+  //       const newTetromino = {tetromino: TETROMINOS[0].shape}
+  //       setPlayer({ ...player, ...newTetromino });
+  //     } else {
+  //       const newTetromino = {tetromino: TETROMINOS_EXTENDED[0].shape}
+  //       setPlayer({ ...player, ...newTetromino });
+  //     }
+  //   }
+  // }, []);
 
   const rotate = (matrix, dir) => {
     // Transpose the rows so that they become cols
@@ -56,10 +67,10 @@ export const usePlayer = () => {
   const resetPlayer = useCallback(() => {
     setPlayer({
       pos: { x: STAGE_WIDTH / 2 - 2, y: 0 },
-      tetromino: randomTetromino().current.shape,
+      tetromino: randomTetromino(gameConfig.gameType).current.shape,
       collided: false,
     });
   }, []);
 
-  return [player, updatePlayerPos, resetPlayer, playerRotate];
+  return [player, updatePlayerPos, resetPlayer, playerRotate, setPlayer];
 };

@@ -14,6 +14,13 @@ const ConfigurePage = () => {
   // const [level, setLevel] = useState("1");
   const [isSaved, setIsSaved] = useState(false);
 
+  useEffect(() => {
+    const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
+    if (storedGameConfig) {
+      updateGameConfig(storedGameConfig);
+    }
+  }, []);
+
   const saveConfig = () => {
     if (isSaved) {
       return false;
