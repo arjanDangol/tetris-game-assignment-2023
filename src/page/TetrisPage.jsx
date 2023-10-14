@@ -48,14 +48,14 @@ const TetrisPage = ({ callback }) => {
   const [highScoreOpen, setHighScoreOpen] = useState(false);
   const [gameConfig, updateGameConfig] = useGameConfig();
 
-  const [player, updatePlayerPos, resetPlayer, playerRotate, setPlayer] = usePlayer(localStorage.getItem("gameConfig"));
+  const [player, updatePlayerPos, resetPlayer, playerRotate, setPlayer] = usePlayer(JSON.parse(localStorage.getItem("gameConfig")));
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
   const [score, setScore, rows, setRows, level, setLevel] =
     useGameStatus(rowsCleared);
 
   const [highScores, updateHighScores] = useHighScores();
   const [playerName, setPlayerName] = useState("");
-  const [nextTetromino, setNextTetromino] = useState(randomTetromino(localStorage.getItem("gameConfig").gameType));
+  const [nextTetromino, setNextTetromino] = useState(randomTetromino(JSON.parse(localStorage.getItem("gameConfig")).gameType));
   
   useEffect(() => {
     const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
@@ -105,7 +105,7 @@ const TetrisPage = ({ callback }) => {
 
   const startGame = () => {
     // Reset everything
-    setStage(createStage());
+    setStage(createStage(JSON.parse(localStorage.getItem("gameConfig")).stageSize));
     setDropTime(1000);
     resetPlayer();
     setGameOver(false);

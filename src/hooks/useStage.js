@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { createStage } from "../utils/gameHelper";
 
 export const useStage = (player, resetPlayer) => {
-  const [stage, setStage] = useState(createStage());
+  const [stage, setStage] = useState(createStage(JSON.parse(localStorage.getItem("gameConfig")).stageSize));
   const [rowsCleared, setRowsCleared] = useState(0);
 
   useEffect(() => {

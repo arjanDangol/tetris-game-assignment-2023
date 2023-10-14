@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { TETROMINOS,TETROMINOS_EXTENDED, randomTetromino } from "../utils/tetrominos";
-import { STAGE_WIDTH, checkCollision } from "../utils/gameHelper";
+import { STAGE_WIDTH_10, STAGE_WIDTH_12, STAGE_WIDTH_14, checkCollision } from "../utils/gameHelper";
 import useGameConfig from "../hooks/useGameConfig";
 
 export const usePlayer = (gameConfig) => {
@@ -65,6 +65,14 @@ export const usePlayer = (gameConfig) => {
 
   // Reset the tetromino position and start from the initial position
   const resetPlayer = useCallback(() => {
+    let STAGE_WIDTH;
+    if (gameConfig.stageSize === "small") {
+      STAGE_WIDTH = STAGE_WIDTH_10;
+    } else if (gameConfig.stageSize === "regular") {
+      STAGE_WIDTH = STAGE_WIDTH_12;
+    } else if (gameConfig.stageSize === "large") {
+      STAGE_WIDTH = STAGE_WIDTH_14;
+    }
     setPlayer({
       pos: { x: STAGE_WIDTH / 2 - 2, y: 0 },
       tetromino: randomTetromino(gameConfig.gameType).current.shape,

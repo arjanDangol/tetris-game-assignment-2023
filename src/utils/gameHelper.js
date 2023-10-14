@@ -1,11 +1,28 @@
-export const STAGE_WIDTH = 12;
-export const STAGE_HEIGHT = 20;
+export const STAGE_WIDTH_10 = 10;
+export const STAGE_HEIGHT_18 = 18;
+export const STAGE_WIDTH_12 = 12;
+export const STAGE_HEIGHT_20 = 20;
+export const STAGE_WIDTH_14 = 14;
+export const STAGE_HEIGHT_22 = 22;
 
 // Function to create the stage with array of array
-export const createStage = () =>
-  Array.from(Array(STAGE_HEIGHT), () =>
+export const createStage = (stageSize) =>{
+  let STAGE_HEIGHT, STAGE_WIDTH;
+  if (stageSize === "small") {
+    STAGE_WIDTH = STAGE_WIDTH_10;
+    STAGE_HEIGHT = STAGE_HEIGHT_18;
+  } else if (stageSize === "regular") {
+    STAGE_WIDTH = STAGE_WIDTH_12;
+    STAGE_HEIGHT = STAGE_HEIGHT_20;
+  } else if (stageSize === "large") {
+    STAGE_WIDTH = STAGE_WIDTH_14;
+    STAGE_HEIGHT = STAGE_HEIGHT_22;
+  }
+  return Array.from(Array(STAGE_HEIGHT), () =>
     new Array(STAGE_WIDTH).fill([0, "clear"])
   );
+}
+  
 
 // Function to detect if there is any collision between the blocks
 export const checkCollision = (player, stage, { x: moveX, y: moveY }) => {
