@@ -22,6 +22,150 @@ export const usePlayer = (gameConfig) => {
   //     }
   //   }
   // }, []);
+ // useEffect(() => {
+  //   const populationSize = Math.floor(Math.random() * (50 - 20 + 1)) + 20; // Random number between 20 and 50
+  //   const maxGenerations = Math.floor(Math.random() * (200 - 100 + 1)) + 100; // Random number between 100 and 200
+  //   const createPopulation = (populationSize, numberOfGenes) => {
+  //     let population = [];
+  //     for (let i = 0; i < populationSize; i++) {
+  //       let candidateSolution = [];
+  //       for (let j = 0; j < numberOfGenes; j++) {
+  //         // Generate a random gene (1 or 0) for the candidate solution
+  //         let gene = Math.random() < 0.5 ? 0 : 1;
+  //         candidateSolution.push(gene);
+  //       }
+  //       population.push(candidateSolution);
+  //     }
+  //     return population;
+  //   };
+
+  //   const evaluateFitness = (population) => {
+  //     // Implement your logic to evaluate the fitness of each candidate solution
+  //     // Return fitness scores as an array
+  //     let fitnessScores = [];
+  //     for (let solution of population) {
+  //       // Calculate fitness: count the number of ones in the solution
+  //       let fitness = solution.reduce((acc, gene) => acc + gene, 0);
+  //       fitnessScores.push(fitness);
+  //     }
+  //     return fitnessScores;
+  //   };
+    
+
+  //   const selection = (population, fitnessScores) => {
+  //     // Implement your logic to select candidates based on their fitness
+  //     // Return selected parents as an array
+  //     let selectedParents = [];
+    
+  //     // Calculate total fitness of the population
+  //     const totalFitness = fitnessScores.reduce((acc, fitness) => acc + fitness, 0);
+    
+  //     // Create a roulette wheel by calculating probabilities
+  //     const probabilities = fitnessScores.map(fitness => fitness / totalFitness);
+    
+  //     // Spin the roulette wheel to select parents
+  //     for (let _ = 0; _ < population.length; _++) {
+  //       let pointer = Math.random(); // Random number between 0 and 1
+  //       let accumulatedProbability = 0;
+    
+  //       for (let i = 0; i < probabilities.length; i++) {
+  //         accumulatedProbability += probabilities[i];
+  //         if (pointer <= accumulatedProbability) {
+  //           selectedParents.push(population[i]);
+  //           break;
+  //         }
+  //       }
+  //     }
+    
+  //     return selectedParents;
+  //   };
+    
+
+  //   const crossover = (parent1, parent2) => {
+  //     // Check if parent1 and parent2 are valid arrays
+  //     if (!Array.isArray(parent1) || !Array.isArray(parent2)) {
+  //         throw new Error("Invalid parents for crossover");
+  //     }
+  
+  //     // Choose a random crossover point within the valid range of parents' lengths
+  //     const crossoverPoint = Math.floor(Math.random() * Math.min(parent1.length, parent2.length));
+  
+  //     // Create children by combining parent genes
+  //     const child1 = [...parent1.slice(0, crossoverPoint), ...parent2.slice(crossoverPoint)];
+  //     const child2 = [...parent2.slice(0, crossoverPoint), ...parent1.slice(crossoverPoint)];
+  
+  //     return [child1, child2];
+  // };
+  
+    
+
+  //   const mutate = (solution) => {
+  //     // Determine the mutation rate (probability of mutation per move)
+  //     const mutationRate = 0.1; // Adjust this value based on your problem domain
+    
+  //     // Define possible key codes for Tetris moves
+  //     const possibleMoves = [37, 39, 40, 38, 80]; // Left, Right, Down, Up, P
+    
+  //     // Apply mutation to each move in the solution
+  //     for (let i = 0; i < solution.length; i++) {
+  //       // Check if mutation should occur for this move
+  //       if (Math.random() < mutationRate) {
+  //         // Mutate the move (change it to a different valid move)
+  //         const randomMoveIndex = Math.floor(Math.random() * possibleMoves.length);
+  //         solution[i] = possibleMoves[randomMoveIndex];
+  //       }
+  //     }
+  //   };
+    
+    
+
+  //   const geneticAlgorithm = (populationSize, maxGenerations) => {
+  //     let population = createPopulation(populationSize);
+  //     console.log({population})
+    
+  //     for (let generation = 0; generation < maxGenerations; generation++) {
+  //       let fitnessScores = evaluateFitness(population);
+  //       let selectedParents = selection(population, fitnessScores);
+  //       let offspring = [];
+    
+  //       for (let i = 0; i < populationSize / 2; i++) {
+  //         let parent1 = selectedParents[Math.floor(Math.random() * selectedParents.length)];
+  //         let parent2 = selectedParents[Math.floor(Math.random() * selectedParents.length)];
+  //         let [child1, child2] = crossover(parent1, parent2);
+  //         mutate(child1);
+  //         mutate(child2);
+  //         offspring.push(child1);
+  //         offspring.push(child2);
+  //       }
+    
+  //       population = offspring;
+  //     }
+
+  //     let bestSolution = population.reduce((prev, curr) => {
+  //       return evaluateFitness(curr) > evaluateFitness(prev) ? curr : prev;
+  //     });
+    
+  //     // Convert bestSolution into a move (x, y) for the Tetris player
+  //     let bestMove = bestSolution[0]; // Assuming the best move is the first move in the array
+  //     let tetrisMove = { x: 0, y: 0 };
+    
+  //     // Logic to convert bestMove to tetrisMove based on your requirements
+  //     // For example, if bestMove has properties x and y, you can directly assign them:
+  //     tetrisMove.x = bestMove.x;
+  //     tetrisMove.y = bestMove.y;
+    
+  //     // Implement more complex logic if needed based on your specific Tetris game mechanics
+    
+  //     return tetrisMove;
+  //   };
+
+  //   const interval = setInterval(() => {
+  //     const nextMove = geneticAlgorithm(populationSize, maxGenerations);
+  //     setPlayer(prev => ({ ...prev, pos: { x: nextMove.x, y: nextMove.y } }));
+  //   }, 1000); // Adjust the interval according to your game speed
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const rotate = (matrix, dir) => {
     // Transpose the rows so that they become cols

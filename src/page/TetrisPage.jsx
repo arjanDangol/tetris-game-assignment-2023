@@ -57,6 +57,20 @@ const TetrisPage = ({ callback }) => {
   const [playerName, setPlayerName] = useState("");
   const [nextTetromino, setNextTetromino] = useState(randomTetromino(JSON.parse(localStorage.getItem("gameConfig")).gameType));
   
+  // const useRandomMove = setInterval(() => {
+  //       const randomNum = Math.random();
+  //       if (randomNum < 0.33) {
+  //         // Call movePlayer with -1 (left)
+  //         movePlayer(-1);
+  //       } else if (randomNum < 0.66) {
+  //         // Call movePlayer with 1 (right)
+  //         movePlayer(1);
+  //       } else {
+  //         // Call playerRotate with stage and 1 (assuming 1 is the rotation direction)
+  //         playerRotate(stage, 1);
+  //       }
+  //     }, 1000); // Interval in milliseconds (1 second in this case)
+
   useEffect(() => {
     const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
     console.log({ storedGameConfig });
@@ -112,6 +126,29 @@ const TetrisPage = ({ callback }) => {
     setScore(0);
     setRows(0);
     setLevel(parseInt(gameConfig.level));
+
+    const storedGameConfig = JSON.parse(localStorage.getItem("gameConfig"));
+    if (storedGameConfig.gameMode === "ai") {
+      console.log({storedGameConfig})
+      setInterval(() => {
+        const randomNum = Math.random();
+        console.log({randomNum})
+        if (randomNum < 0.33) {
+          // Call movePlayer with -1 (left)
+          move({keyCode: 37});
+        } else if (randomNum < 0.66) {
+          // Call movePlayer with 1 (right)
+          move({keyCode: 39});
+        } 
+        // else if (randomNum < 0.86) {
+        //   // Call playerRotate with stage and 1 (assuming 1 is the rotation direction)
+        //   move({keyCode: 38});
+        // } 
+        else {
+          return false;
+        }
+      }, 2000); // Interval in milliseconds (1 second in this case)
+    }
   };
 
   const drop = () => {
@@ -123,6 +160,7 @@ const TetrisPage = ({ callback }) => {
     setDropTime(1000 / (level + 1) + 200);
 
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
+      
       updatePlayerPos({ x: 0, y: 1, collided: false });
       // if (player.pos.y === 0 && player) {
       //   console.log("y position: ", player.pos.y);
@@ -226,38 +264,12 @@ const TetrisPage = ({ callback }) => {
       };
     }
   }, [gameOver]);
-
-  // // Update next tetromino when player's Y position is less than 1
-  // useEffect(() => {
-  //   if (player.pos.y < 1) {
-  //     setNextTetromino(randomTetromino());
-  //   }
-  // }, [player.pos.y]);
-
-  // // Handle dropping the tetromino every second
-  // useInterval(() => {
-  //   updateNextTetromino();
-  //   // Drop the current tetromino
-  //   if (!checkCollision(player, stage, { x: 0, y: 1 })) {
-  //     updatePlayerPos({ x: 0, y: 1, collided: false });
-  //   } else {
-  //     // Lock the tetromino in the stage if it collides
-  //     updatePlayerPos({ x: 0, y: 0, collided: true });
-  //     // Generate a new random tetromino for the player
-  //     resetPlayer();
-  //   }
-  // }, 1000);
   useEffect(() => {
     if (rowsCleared > 0) {
       const rowsClearedAudio = new Audio(rowsClearedSound);
       rowsClearedAudio.loop = false; // Loop the background music
       rowsClearedAudio.play(); // Play background music if it's on
 
-      // Clean up audio element when the component unmounts or music status changes
-      // return () => {
-      //   rowsClearedAudio.pause();
-      //   rowsClearedAudio.currentTime = 0; // Reset music playback position
-      // };
     }
   }, [rowsCleared]);
 
@@ -284,7 +296,7 @@ const TetrisPage = ({ callback }) => {
                 ))
               )}
             </div> */}
-            <div className="w-full h-full bg-black border-gray-700 border-2 mb-8 grid text-white next-block-container relative">
+            {/* <div className="w-full h-full bg-black border-gray-700 border-2 mb-8 grid text-white next-block-container relative">
               <div className="absolute left-5 top-1"> Next Blocks </div>
               <StyledCell type={0} color={TETROMINOS[0].color} />
               <StyledCell type={0} color={TETROMINOS[0].color} />
@@ -349,7 +361,7 @@ const TetrisPage = ({ callback }) => {
               <StyledCell type={0} color={TETROMINOS[0].color} />
               <StyledCell type={0} color={TETROMINOS[0].color} />
               <StyledCell type={"T"} color={TETROMINOS["T"].color} />
-            </div>
+            </div> */}
             <Button callback={startGame} name={"Start"} classes="mb-8" />
             <Button callback={toggleEndModal} name={"End"} />
           </div>
